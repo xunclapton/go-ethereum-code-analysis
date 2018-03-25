@@ -146,7 +146,10 @@ doRefresh函数
 		// (not hash-sized) and it is not easily possible to generate a
 		// sha3 preimage that falls into a chosen bucket.
 		// We perform a lookup with a random target instead.
-		//这里暂时没看懂
+		// Kad的论文里要求挑选最少使用的bucket来执行更新操作，更新的逻辑是lookup一个随机生成的落在此bucket中的地址
+		// 然后看看是不是可以获得距离更近的node来更新这个bucket
+		// 但是以太坊使用的地址是根据NodeID(512bit)hash来的(256bit)，而lookup的参数是NodeID
+		// 很难根据指定的hash前多少位来反推出可以生成此bucket中的地址的NodeID，所以就随机选了一个NodeID，相当于bucket的选择也是随机的
 		var target NodeID
 		rand.Read(target[:])
 		result := tab.lookup(target, false) //lookup是查找距离target最近的k个节点
